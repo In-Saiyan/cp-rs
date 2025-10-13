@@ -3,7 +3,12 @@ name = "cp-rs"
 version = "0.1.0"
 edition = "2024"
 
+[[bin]]
+name = "bundler"
+path = "src/bin/bundler.rs"
+
 [dependencies]
+regex = "1.10"
 
 [dependencies.cp-lib]
 path="./cp-lib"

@@ -9,7 +9,7 @@ impl Scanner<io::StdinLock<'static>> {
     pub fn new() -> Self {
         Self {
             buffer: Vec::new(),
-            reader: Box::leak(Box::new(io::stdin())).lock(),
+            reader: Box::leak(Box::new(io::stdin())).lock(), // I don't like this but it works :/
         }
     }
 }

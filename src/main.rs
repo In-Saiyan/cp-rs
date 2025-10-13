@@ -6,6 +6,8 @@
 
 use cp_lib::io::scanner::Scanner;
 
+const _PROBLEM: &str = "F1. Tree Cutting (Easy Version)";
+
 
 fn main() {
     let mut sc = Scanner::new();
