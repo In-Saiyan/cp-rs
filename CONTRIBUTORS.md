@@ -7,7 +7,7 @@ Thank you to everyone who has contributed to making cp-rs a better competitive p
 We welcome contributions! Please follow these guidelines:
 
 ### Before Contributing
-1. Read [.copilot-instructions.md](.copilot-instructions.md) for development guidelines
+1. Read [copilot-instructions.md](copilot-instructions.md) for development guidelines
 2. Check [BUNDLER_INTEGRATION.md](BUNDLER_INTEGRATION.md) for bundler compatibility requirements
 3. Review [docs/PULL_REQUESTS.md](docs/PULL_REQUESTS.md) for the contribution process
 4. Understand testing requirements in [docs/TESTING.md](docs/TESTING.md)

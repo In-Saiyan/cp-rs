@@ -10,7 +10,7 @@ This document outlines the process and requirements for contributing to cp-rs vi
 - Reference the issue number in your PR description
 
 ### 2. Read Documentation
-- Review [.copilot-instructions.md](../.copilot-instructions.md) for development guidelines
+- Review [copilot-instructions.md](../copilot-instructions.md) for development guidelines
 - Check [BUNDLER_INTEGRATION.md](../BUNDLER_INTEGRATION.md) for bundler compatibility requirements
 - Understand the project's competitive programming focus
 
