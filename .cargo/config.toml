@@ -1,0 +1,3 @@
+[test]
+# Enable parallel test execution
+jobs = 0  # Use all available CPU cores
