@@ -7,8 +7,13 @@ edition = "2024"
 name = "bundler"
 path = "src/bin/bundler.rs"
 
+[[bin]]
+name = "ast_bundler"
+path = "src/bin/ast_bundler.rs"
+
 [dependencies]
 regex = "1.10"
+bundler-lib = { path = "./bundler-lib" }
 
 [dependencies.cp-lib]
 path="./cp-lib"
