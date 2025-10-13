@@ -10,7 +10,7 @@ When contributing to this project, please follow these important practices:
 2. **Test Coverage**: All new features MUST have comprehensive test units in `cp-lib/tests/`
 3. **Testing Workflow**: Run tests and verify bundling before considering features complete
 
-See [copilot-instructions.md](copilot-instructions.md) and [BUNDLER_INTEGRATION.md](BUNDLER_INTEGRATION.md) for detailed guidelines.
+See [CONTIBUTORS.md](CONTRIBUTORS.md), [copilot-instructions.md](copilot-instructions.md) and [BUNDLER_INTEGRATION.md](BUNDLER_INTEGRATION.md) for detailed guidelines.
 
 ## Quick Start
 
