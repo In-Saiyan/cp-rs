@@ -102,8 +102,6 @@ impl<'a> AstBundler<'a> {
             return Ok(());
         }
 
-        println!("Resolving module: {}", module_path);
-
         // For cp_lib::io::scanner::Scanner, we want io/scanner.rs
         // For cp_lib::utils::math, we want utils/math.rs or utils/mod.rs
         let mut file_patterns = Vec::new();
@@ -124,15 +122,11 @@ impl<'a> AstBundler<'a> {
         }
 
         for pattern in file_patterns {
-            println!("  Trying pattern: {}", pattern);
-            
             if let Some(resolved_path) = self.resolver.resolve_module_file(&PathBuf::from(&pattern)) {
                 let module_key = resolved_path.to_string_lossy().to_string();
                 
                 if !self.processed_modules.contains(&module_key) {
                     self.processed_modules.insert(module_key.clone());
-                    
-                    println!("  Found and processing: {}", resolved_path.display());
                     
                     // Read and parse the module file
                     let content = fs::read_to_string(&resolved_path)?;
@@ -146,8 +140,6 @@ impl<'a> AstBundler<'a> {
                 }
             }
         }
-
-        println!("  Could not resolve module: {}", module_path);
         Ok(())
     }
 

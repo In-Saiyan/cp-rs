@@ -86,12 +86,12 @@ impl CodeBundler {
         let generic_path = self.config.output_dir.join("solution.rs");
         fs::write(&generic_path, &bundled_code)?;
 
-        println!("✅ Code bundled successfully to: {}", output_path.display());
-        println!("📁 File size: {} bytes", bundled_code.len());
+        println!("Code bundled successfully to: {}", output_path.display());
+        println!("File size: {} bytes", bundled_code.len());
         if problem_name.is_some() {
-            println!("🏷️  Problem: {}", problem_name.unwrap());
+            println!("Problem: {}", problem_name.unwrap());
         }
-        println!("📋 Generic copy created: {}", generic_path.display());
+        println!("Generic copy created: {}", generic_path.display());
 
         Ok(output_filename)
     }
