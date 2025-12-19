@@ -1,7 +1,7 @@
 /*
 * Author: Aryan Singh <aryan.singh.iiitl@gmail.com>
 * License: MIT
-* Date: 2024-06-10
+* Date: 2025-06-10
 */
 
 use cp_lib::io::scanner::Scanner;
