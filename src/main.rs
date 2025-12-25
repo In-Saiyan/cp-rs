@@ -4,10 +4,10 @@
 * Date: 2025-06-10
 */
 
+use cp_lib::algorithms::exponential;
 use cp_lib::io::scanner::Scanner;
 
-const _PROBLEM: &str = "F1. Tree Cutting (Easy Version)";
-
+// const _PROBLEM: &str = "F1. Tree Cutting (Easy Version)";
 
 fn main() {
     let mut sc = Scanner::new();
@@ -22,14 +22,11 @@ fn main() {
         let last = arr.iter().rposition(|&x| x);
 
         let count = match (first, last) {
-            (Some(f), Some(l)) if f < l => {
-                arr[f+1..l].iter().filter(|&&x| !x).count()
-            }
+            (Some(f), Some(l)) if f < l => arr[f + 1..l].iter().filter(|&&x| !x).count(),
             _ => 0,
         };
-
+        let mut test_no = exponential::binpow(2, 8);
+        println!("{test_no}");
         println!("{}", count);
     }
 }
-
-

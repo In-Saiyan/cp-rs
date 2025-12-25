@@ -1,0 +1,1 @@
+{"name":"Local: main","url":"/home/user/cp-rs/src/main.rs","tests":[{"id":1766645795524,"input":"1\n1\n1\n1\n1\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/user/cp-rs/src/main.rs","group":"local","local":true}
