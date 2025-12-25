@@ -1,5 +1,6 @@
 /*
  * AST-based bundler core logic
+ * Please don't touch I will nuke the repo if you do
  */
 
 use crate::file_resolver::FileResolver;

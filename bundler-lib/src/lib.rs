@@ -59,16 +59,24 @@ impl CodeBundler {
         let main_content = fs::read_to_string(&self.config.main_file)?;
         let main_ast: SynFile = syn::parse_str(&main_content)?;
 
+        // If an explicit ID is provided, it fully determines the output filename.
+        let explicit_id = self.extract_id(&main_ast);
+
         // Extract problem name
         let problem_name = self.extract_problem_name(&main_ast);
         
         // Generate filename
-        let output_filename = if let Some(ref name) = problem_name {
+        let output_filename = if let Some(ref id) = explicit_id {
+            format!("solution_{}.rs", id)
+        } else if let Some(ref name) = problem_name {
             self.filename_gen.generate_filename(name)
         } else {
-            format!("solution_{}.rs", std::time::SystemTime::now()
-                .duration_since(std::time::UNIX_EPOCH)?
-                .as_secs())
+            format!(
+                "solution_{}.rs",
+                std::time::SystemTime::now()
+                    .duration_since(std::time::UNIX_EPOCH)?
+                    .as_secs()
+            )
         };
 
         let output_path = self.config.output_dir.join(&output_filename);
@@ -81,17 +89,21 @@ impl CodeBundler {
 
         // Write to file
         fs::write(&output_path, &bundled_code)?;
-        
-        // Create generic copy
-        let generic_path = self.config.output_dir.join("solution.rs");
-        fs::write(&generic_path, &bundled_code)?;
+
+        // Create generic copy unless an explicit ID was provided.
+        if explicit_id.is_none() {
+            let generic_path = self.config.output_dir.join("solution.rs");
+            fs::write(&generic_path, &bundled_code)?;
+            println!("Generic copy created: {}", generic_path.display());
+        }
 
         println!("Code bundled successfully to: {}", output_path.display());
         println!("File size: {} bytes", bundled_code.len());
-        if problem_name.is_some() {
+        if explicit_id.is_some() {
+            println!("ID: {}", explicit_id.unwrap());
+        } else if problem_name.is_some() {
             println!("Problem: {}", problem_name.unwrap());
         }
-        println!("Generic copy created: {}", generic_path.display());
 
         Ok(output_filename)
     }
@@ -111,6 +123,38 @@ impl CodeBundler {
         None
     }
 
+    fn extract_id(&self, ast: &SynFile) -> Option<String> {
+        for item in &ast.items {
+            let Item::Const(ItemConst { ident, expr, .. }) = item else {
+                continue;
+            };
+
+            if ident != "ID" && ident != "_ID" {
+                continue;
+            }
+
+            let raw = match &**expr {
+                syn::Expr::Lit(syn::ExprLit { lit: syn::Lit::Str(lit_str), .. }) => lit_str.value(),
+                syn::Expr::Lit(syn::ExprLit { lit: syn::Lit::Int(lit_int), .. }) => lit_int.base10_digits().to_string(),
+                _ => continue,
+            };
+
+            let sanitized: String = raw
+                .chars()
+                .map(|c| if c.is_ascii_alphanumeric() { c } else { '_' })
+                .collect();
+
+            let sanitized = sanitized.trim_matches('_').to_string();
+            if sanitized.is_empty() {
+                continue;
+            }
+
+            return Some(sanitized);
+        }
+
+        None
+    }
+
     fn bundle_ast(&mut self, main_ast: &SynFile) -> Result<String, Box<dyn std::error::Error>> {
         let mut bundler = AstBundler::new(&self.resolver);
         
@@ -121,5 +165,39 @@ impl CodeBundler {
         let bundled = bundler.generate_bundled_code()?;
         
         Ok(bundled)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use tempfile::tempdir;
+
+    #[test]
+    fn uses_id_for_output_filename_without_timestamp() {
+        let dir = tempdir().unwrap();
+        let main_file = dir.path().join("main.rs");
+        let out_dir = dir.path().join("out");
+
+        std::fs::write(
+            &main_file,
+            "const ID: &str = \"ABC-123\";\nfn main() {}\n",
+        )
+        .unwrap();
+
+        let config = BundlerConfig {
+            main_file,
+            // lib_root doesn't matter for this test.
+            lib_root: dir.path().to_path_buf(),
+            output_dir: out_dir.clone(),
+            create_versioned_copy: false,
+        };
+
+        let mut bundler = CodeBundler::new(config);
+        let filename = bundler.bundle().unwrap();
+
+        assert_eq!(filename, "solution_ABC_123.rs");
+        assert!(out_dir.join("solution_ABC_123.rs").exists());
+        assert!(!out_dir.join("solution.rs").exists());
     }
 }
